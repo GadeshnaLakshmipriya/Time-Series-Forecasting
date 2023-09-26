@@ -1,33 +1,51 @@
-# Importing the required libraries
 import pandas as pd
-from statsmodels.tsa.arima.model import ARIMA
+import numpy as np
 import matplotlib.pyplot as plt
+# reading the dataset using read_csv
+df = pd.read_csv("stock_data.csv",
+				parse_dates=True,
+				index_col="Date")
 
-# Read the doctor's visit dataset
-df = pd.read_csv('doctors_visit_data.csv')
+# displaying the first five rows of dataset
+df.head()
+# deleting column
+df.drop(columns='Unnamed: 0')
+df['Volume'].plot()
+df.plot(subplots=True, figsize=(4, 4))
+# Resampling the time series data based on monthly 'M' frequency
+df_month = df.resample("M").mean()
 
-# Convert the date column to datetime format
-df['date'] = pd.to_datetime(df['date'])
+# using subplot
+fig, ax = plt.subplots(figsize=(6, 6))
 
-# Set the date column as the index
-df.set_index('date', inplace=True)
+# plotting bar graph
+ax.bar(df_month['2016':].index,
+	df_month.loc['2016':, "Volume"],
+	width=25, align='center')
+df.Low.diff(2).plot(figsize=(6, 6))
+df.High.diff(2).plot(figsize=(10, 6))
+# Finding the trend in the "Open"
+# column using moving average method
+window_size = 50
+rolling_mean = df['Open'].rolling\
+			(window_size).mean()
+rolling_mean.plot()
+df['Change'] = df.Close.div(df.Close.shift())
+df['Change'].plot(figsize=(10, 8), fontsize=16)
+df['2017']['Change'].plot(figsize=(10, 6))
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Split the data into training and testing sets
-train_data = df[:'2022-12-31']
-test_data = df['2023-01-01':]
+# reading the dataset using read_csv
+df = pd.read_csv("stock_data.csv", parse_dates=True)
+df.drop(columns='Unnamed: 0', inplace=True)
 
-# Create the ARIMA model
-model = ARIMA(train_data, order=(1, 1, 1))
-model_fit = model.fit()
+df['Date']= pd.to_datetime(df['Date'])
 
-# Make predictions on the test data
-predictions = model_fit.predict(start=len(train_data), end=len(train_data)+len(test_data)-1)
+# extract year from date column
+df["Year"] = df["Date"].dt.year
 
-# Visualize the results
-plt.plot(test_data.index, test_data['visits'], label='Actual')
-plt.plot(test_data.index, predictions, label='Predicted')
-plt.xlabel('Date')
-plt.ylabel('Number of Visits')
-plt.title("Time Series Forecasting in Doctor's Visit Analysis")
-plt.legend()
-plt.show()
+# box plot grouped by year
+sns.boxplot(data=df, x="Year", y="Open")
