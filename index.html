@@ -7,10 +7,10 @@
     <h1>Laptop Sales Forecasting</h1>
     
     <label for="week">Week:</label>
-    <input type="text" id="week" placeholder="Week 1"><br><br>
+    <input type="text" id="week" placeholder="input"><br><br>
 
     <label for="sales">Sales:</label>
-    <input type="number" id="sales" placeholder="Enter sales"><br><br>
+    <input type="number" id="sales" placeholder="Enter sales here"><br><br>
 
     <button onclick="addSales()">Add Sales</button><br><br>
 
@@ -36,6 +36,9 @@
         }
 
         function forecastSales() {
+            // Implement your time series forecasting logic here (not possible with HTML alone).
+            // You would typically use a server-side language like Python for this purpose.
+            // For a simple example, you can calculate the average of past sales.
             const totalSales = salesData.reduce((acc, item) => acc + item.sales, 0);
             const averageSales = totalSales / salesData.length;
             document.getElementById('forecast').textContent = `Average Forecast: ${averageSales.toFixed(2)} units per week`;
