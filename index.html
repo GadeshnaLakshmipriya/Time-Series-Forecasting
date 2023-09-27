@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sales Time Series Forecasting</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #inputBox {
+            margin: 20px auto;
+            padding: 10px;
+        }
+        #result {
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sales Time Series Forecasting</h1>
+    
+    <div id="inputBox">
+        <label for="salesData">Enter historical sales data (comma-separated):</label><br>
+        <input type="text" id="salesData"><br>
+        <label for="forecastPeriod">Enter the number of periods to forecast:</label><br>
+        <input type="number" id="forecastPeriod"><br>
+        <button onclick="forecastSales()">Forecast Sales</button>
+    </div>
+
+    <div id="result">
+        <h2>Forecasted Sales:</h2>
+        <ul id="forecastList"></ul>
+    </div>
+
+    <script>
+        function forecastSales() {
+            const salesDataInput = document.getElementById("salesData").value;
+            const forecastPeriod = parseInt(document.getElementById("forecastPeriod").value);
+
+            // Parse the input data and convert it into an array of numbers
+            const salesData = salesDataInput.split(",").map(Number);
+
+            // Perform a simple moving average forecast
+            const forecastedSales = performSimpleMovingAverage(salesData, forecastPeriod);
+
+            // Display the forecasted sales
+            const forecastList = document.getElementById("forecastList");
+            forecastList.innerHTML = "";
+            for (let i = 0; i < forecastedSales.length; i++) {
+                const listItem = document.createElement("li");
+                listItem.textContent = `Period ${salesData.length + i + 1}: ${forecastedSales[i]}`;
+                forecastList.appendChild(listItem);
+            }
+        }
+
+        // Function to calculate the simple moving average forecast
+        function performSimpleMovingAverage(data, forecastPeriod) {
+            const forecastedSales = [];
+            const n = data.length;
+
+            for (let i = 0; i < forecastPeriod; i++) {
+                // Calculate the average of the last 'n' data points
+                const avg = data.slice(-n).reduce((a, b) => a + b, 0) / n;
+                forecastedSales.push(avg);
+            }
+
+            return forecastedSales;
+        }
+    </script>
+</body>
+</html>
