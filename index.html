@@ -36,9 +36,6 @@
         }
 
         function forecastSales() {
-            // Implement your time series forecasting logic here (not possible with HTML alone).
-            // You would typically use a server-side language like Python for this purpose.
-            // For a simple example, you can calculate the average of past sales.
             const totalSales = salesData.reduce((acc, item) => acc + item.sales, 0);
             const averageSales = totalSales / salesData.length;
             document.getElementById('forecast').textContent = `Average Forecast: ${averageSales.toFixed(2)} units per week`;
