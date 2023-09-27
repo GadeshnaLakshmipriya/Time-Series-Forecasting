@@ -1,0 +1,2 @@
+Time series forecasting is a technique for the prediction of events through a sequence of time. It predicts future events by analyzing the trends of the past, on the assumption that future trends will hold similar to historical trends.
+ARIMA models are great for forecasting stationary time series data. This implies that the data does not contain any seasonal or temporary trends and the statistical properties of the source of the time series data, like the mean and variance, do not change over time.
